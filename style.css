@@ -1,281 +1,366 @@
-/* Reset básico e fontes */
+/* ==========================================================================
+   PALETA DE CORES (TONS PASTÉIS DE AMARELO E PALHA)
+   ========================================================================== */
+:root {
+  --bg-gradient: linear-gradient(135deg, #fffef5 0%, #fff9e6 50%, #fff3cd 100%);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --primary: #f6d365;
+  --primary-hover: #fda085;
+  --accent-yellow: #f1c40f;
+  --pastel-yellow-light: #fffde7;
+  --pastel-yellow-border: #f9e79f;
+  --text-dark: #4a433b;
+  --text-muted: #7d7565;
+  --error-red: #e74c3c;
+  --success-green: #2ecc71;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow: 0 20px 40px rgba(212, 175, 55, 0.12), 0 8px 16px rgba(0, 0, 0, 0.04);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   RESET & ESTRUTURA GERAL
+   ========================================================================== */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
-    background-color: #FFFDF0; /* Fundo suave em tom amarelo pastel bem leve */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  color: var(--text-dark);
 }
 
-/* Container Principal Totalmente Centralizado e com animação de entrada */
-.container {
-    background-color: #FFFFFF;
-    width: 100%;
-    max-width: 550px;
-    padding: 40px 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(222, 201, 121, 0.15); 
-    border: 2px solid #FDF4CD; /* Detalhe em amarelo pastel */
-    animation: fadeIn 0.6s ease-out;
+.page-container {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
 }
 
-h1 {
-    text-align: center;
-    color: #5D5429; /* Tom escuro confortável baseado no amarelo */
-    font-size: 1.8rem;
-    margin-bottom: 5px;
-    font-weight: 600;
+/* ==========================================================================
+   CARD DO FORMULÁRIO (CENTRALIZADO)
+   ========================================================================== */
+.card-contact {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  animation: fadeIn 0.8s ease-out;
 }
 
-.subtitle {
-    text-align: center;
-    color: #8C804E;
-    font-size: 0.95rem;
-    margin-bottom: 25px;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Contador de Cadastros (Bônus 🏆) */
-.counter-box {
-    background-color: #FFF9D4; 
-    color: #6B5E28;
-    text-align: center;
-    padding: 10px;
-    border-radius: 10px;
-    font-weight: 500;
-    margin-bottom: 25px;
-    font-size: 0.9rem;
-    border: 1px dashed #E6D073;
+.card-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.card-header .badge {
+  display: inline-block;
+  background: #fff8dc;
+  color: #b78103;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 50px;
+  border: 1px solid #fce8b2;
+  margin-bottom: 12px;
+}
+
+.card-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.card-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.counter-badge {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--pastel-yellow-light);
+  border: 1px solid var(--pastel-yellow-border);
+  color: #8a6d3b;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   FORMULÁRIO E INPUTS
+   ========================================================================== */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
 .form-group {
-    margin-bottom: 20px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 label {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #5D5429;
-    margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-dark);
 }
 
-/* Campos de Entrada com Transição Suave */
+.required {
+  color: var(--error-red);
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="tel"],
 input[type="date"],
 select,
 textarea {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #EBE7CD;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    color: #444;
-    background-color: #FCFDF9;
-    outline: none;
-    transition: all 0.3s ease;
+  width: 100%;
+  padding: 12px 16px;
+  background: #fffdf5;
+  border: 2px solid #f0e6d2;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  outline: none;
+  transition: var(--transition);
+}
+
+textarea {
+  resize: vertical;
 }
 
 /* Efeito de Foco */
 input:focus,
 select:focus,
 textarea:focus {
-    border-color: #EBD368; 
-    background-color: #FFFFFF;
-    box-shadow: 0 0 8px rgba(235, 211, 104, 0.4);
+  border-color: #f39c12;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(243, 156, 18, 0.15);
 }
 
-.radio-group {
-    display: flex;
-    gap: 15px;
-    margin-top: 4px;
-}
-
-.radio-label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 400;
-    cursor: pointer;
-}
-
-.checkbox-group {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.checkbox-group input {
-    margin-top: 4px;
-    cursor: pointer;
-    transform: scale(1.1);
-}
-
-.checkbox-group label {
-    margin-bottom: 0;
-    cursor: pointer;
-    font-weight: 400;
-}
-
-.char-counter {
-    text-align: right;
-    font-size: 0.75rem;
-    color: #999;
-    margin-top: 4px;
-}
-
-/* Mensagens de Erro Ocultas */
-.error-message {
-    color: #D32F2F;
-    font-size: 0.78rem;
-    margin-top: 5px;
-    display: none;
-    font-weight: 500;
-}
-
-/* Animação e Estilo quando o campo for inválido (Shake effect) */
-.form-group.invalid input,
-.form-group.invalid select,
-.form-group.invalid textarea {
-    border-color: #FFB3B3;
-    background-color: #FFF5F5;
-    animation: shake 0.4s ease-in-out;
-}
-
-.form-group.invalid .error-message {
-    display: block;
-}
-
-/* Botão Enviar com efeitos Hover e Actives */
-button[type="submit"] {
-    width: 100%;
-    padding: 14px;
-    background-color: #F7E06D; 
-    border: none;
-    border-radius: 12px;
-    color: #4A3E06;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(247, 224, 109, 0.3);
-    margin-top: 10px;
-}
-
-button[type="submit"]:hover {
-    background-color: #E6CE55;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(230, 206, 85, 0.4);
-}
-
-button[type="submit"]:active {
-    transform: translateY(0);
-}
-
-/* Modal Popup de Sucesso */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-    z-index: 1000;
-}
-
-.modal-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.modal-content {
-    background-color: #FFFFFF;
-    padding: 40px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-    transform: translateY(-50px);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 3px solid #F7E06D;
-}
-
-.modal-overlay.active .modal-content {
-    transform: translateY(0);
-}
-
-.modal-icon {
-    font-size: 3.5rem;
-    margin-bottom: 15px;
-}
-
-.modal-content h2 {
-    color: #5D5429;
-    margin-bottom: 10px;
-}
-
-.modal-content p {
-    color: #666;
-    font-size: 0.95rem;
-    margin-bottom: 25px;
-}
-
-.modal-btn {
-    padding: 10px 25px;
-    background-color: #F7E06D;
-    border: none;
-    border-radius: 8px;
-    color: #4A3E06;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.modal-btn:hover {
-    background-color: #E6CE55;
-}
-
-/* Keyframes de Animações */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Estado de Erro nos Inputs */
+.form-group.has-error input,
+.form-group.has-error select,
+.form-group.has-error textarea {
+  border-color: var(--error-red);
+  background-color: #fff5f5;
+  animation: shake 0.4s ease-in-out;
 }
 
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-6px); }
-    40%, 80% { transform: translateX(6px); }
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
 }
 
-/* Responsividade Completa 📱 */
-@media (max-width: 480px) {
-    .container {
-        padding: 25px 20px;
-    }
-    h1 {
-        font-size: 1.5rem;
-    }
-    .radio-group {
-        flex-direction: column;
-        gap: 8px;
-    }
+.error-message {
+  font-size: 0.8rem;
+  color: var(--error-red);
+  margin-top: 5px;
+  min-height: 18px;
+  font-weight: 500;
+  display: block;
+}
+
+/* Opções de Radio */
+.radio-options {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fffdf5;
+  border: 2px solid #f0e6d2;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: var(--transition);
+  flex: 1;
+}
+
+.radio-label:hover {
+  background: #fff8dc;
+}
+
+.radio-label input[type="radio"] {
+  accent-color: var(--accent-yellow);
+}
+
+/* Checkbox */
+.checkbox-group {
+  margin-top: 8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.checkbox-label input[type="checkbox"] {
+  accent-color: var(--accent-yellow);
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+
+/* Contador de Caracteres */
+.label-with-counter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.char-counter {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   BOTÃO SUBMIT
+   ========================================================================== */
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  border: none;
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 20px rgba(253, 160, 133, 0.35);
+  transition: var(--transition);
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(253, 160, 133, 0.45);
+  filter: brightness(1.03);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   NOTIFICAÇÃO TOAST (JANELINHA FLUTUANTE DE ERRO/SUCESSO)
+   ========================================================================== */
+.toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  z-index: 9999;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border-left: 6px solid var(--success-green);
+  max-width: 380px;
+}
+
+.toast.hidden {
+  opacity: 0;
+  transform: translateX(120%);
+  pointer-events: none;
+}
+
+.toast.toast-error {
+  border-left-color: var(--error-red);
+}
+
+.toast-icon {
+  font-size: 1.5rem;
+}
+
+.toast-content h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.toast-content p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (CELULAR 📱)
+   ========================================================================== */
+@media (max-width: 600px) {
+  body {
+    padding: 16px;
+  }
+
+  .card-contact {
+    padding: 24px 18px;
+    border-radius: var(--radius-md);
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .radio-options {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .toast {
+    left: 16px;
+    right: 16px;
+    top: 16px;
+    max-width: calc(100% - 32px);
+  }
 }

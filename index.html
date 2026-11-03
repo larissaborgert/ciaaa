@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Contato</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://googleapis.com" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Entre em Contato</h1>
+        <p class="subtitle">Preencha o formulário abaixo para falar conosco!</p>
+        
+        <div class="counter-box">
+            Contatos cadastrados: <span id="contact-counter">0</span> 🚀
+        </div>
+
+        <form id="contact-form" novalidate>
+            <!-- 1. Nome (Texto) -->
+            <div class="form-group">
+                <label for="nome">Nome Completo *</label>
+                <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
+                <div class="error-message" id="error-nome">Por favor, insira seu nome.</div>
+            </div>
+
+            <!-- 2. E-mail (E-mail) -->
+            <div class="form-group">
+                <label for="email">E-mail Corporativo *</label>
+                <input type="email" id="email" name="email" placeholder="exemplo@email.com" required>
+                <div class="error-message" id="error-email">Insira um e-mail válido (ex: nome@dominio.com).</div>
+            </div>
+
+            <!-- 3. Telefone (Telefone com Máscara) -->
+            <div class="form-group">
+                <label for="telefone">Telefone / WhatsApp *</label>
+                <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" maxlength="15" required>
+                <div class="error-message" id="error-telefone">Insira um telefone válido com DDD.</div>
+            </div>
+
+            <!-- 4. Data de Nascimento (Data) -->
+            <div class="form-group">
+                <label for="data-nascimento">Data de Nascimento</label>
+                <input type="date" id="data-nascimento" name="dataNascimento">
+                <div class="error-message" id="error-data-nascimento"></div>
+            </div>
+
+            <!-- 5. Departamento (Seleção) -->
+            <div class="form-group">
+                <label for="departamento">Falar com o Departamento *</label>
+                <select id="departamento" name="departamento" required>
+                    <option value="" disabled selected>Selecione uma opção...</option>
+                    <option value="comercial">Comercial / Vendas</option>
+                    <option value="suporte">Suporte Técnico</option>
+                    <option value="financeiro">Financeiro</option>
+                    <option value="parcerias">Parcerias</option>
+                </select>
+                <div class="error-message" id="error-departamento">Selecione um departamento.</div>
+            </div>
+
+            <!-- 6. Tipo de Contato (Opções/Radio) -->
+            <div class="form-group">
+                <label>Tipo de solicitação *</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="tipo-solicitacao" value="duvida" required> Dúvida
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="tipo-solicitacao" value="sugestao"> Sugestão
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="tipo-solicitacao" value="reclamacao"> Reclamação
+                    </label>
+                </div>
+                <div class="error-message" id="error-tipo-solicitacao">Selecione o tipo de solicitação.</div>
+            </div>
+
+            <!-- 7. Mensagem (Área de Texto com Contador) -->
+            <div class="form-group">
+                <label for="mensagem">Sua Mensagem *</label>
+                <textarea id="mensagem" name="mensagem" rows="4" placeholder="Escreva sua mensagem aqui..." maxlength="500" required></textarea>
+                <div class="char-counter"><span id="char-count">0</span>/500 caracteres</div>
+                <div class="error-message" id="error-mensagem">A mensagem não pode ficar vazia.</div>
+            </div>
+
+            <!-- 8. Termos (Caixa de Marcação/Checkbox) -->
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="termos" name="termos" required>
+                <label for="termos">Aceito os termos de privacidade e uso de dados. *</label>
+                <div class="error-message" id="error-termos">Você precisa aceitar os termos para continuar.</div>
+            </div>
+
+            <button type="submit" id="btn-enviar">Enviar Mensagem 🚀</button>
+        </form>
+    </div>
+
+    <!-- Modal de Sucesso -->
+    <div class="modal-overlay" id="success-modal">
+        <div class="modal-content">
+            <div class="modal-icon">🎉</div>
+            <h2>Sucesso!</h2>
+            <p>Seu contato foi registrado com sucesso no sistema!</p>
+            <button class="modal-btn" id="close-modal">Excelente! 👍</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

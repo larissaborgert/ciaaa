@@ -1,148 +1,122 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Página de Contato | Tons Pastéis</title>
-  <link rel="stylesheet" href="estilo.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Contato</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Notificação Flutuante de Sucesso/Erro -->
-  <div id="toast" class="toast hidden">
-    <div class="toast-icon" id="toastIcon">✨</div>
-    <div class="toast-content">
-      <h4 id="toastTitle">Sucesso!</h4>
-      <p id="toastMessage">Mensagem enviada com sucesso.</p>
+    <div class="container">
+        <header class="header">
+            <span class="badge">💬 Fale Conosco</span>
+            <h1>Entre em Contato</h1>
+            <p>Preencha os campos abaixo para nos enviar uma mensagem.</p>
+            <div class="counter-badge">
+                📊 Total de contatos cadastrados: <strong id="totalContatos">0</strong>
+            </div>
+        </header>
+
+        <!-- Mensagem de Sucesso (Toast / Janela Deslizante) -->
+        <div id="toastSucesso" class="toast toast-sucesso">
+            <div class="toast-content">
+                <span class="toast-icon">🎉</span>
+                <div>
+                    <h3 class="toast-title">Sucesso!</h3>
+                    <p class="toast-message">Seu contato foi enviado e salvo no localStorage!</p>
+                </div>
+            </div>
+        </div>
+
+        <form id="formContato" class="form" novalidate>
+            
+            <!-- 1. Nome (Texto) -->
+            <div class="form-group">
+                <label for="nome">Nome Completo <span class="required">*</span></label>
+                <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo">
+                <span class="error-msg" id="erroNome"></span>
+            </div>
+
+            <!-- 2. E-mail (E-mail) -->
+            <div class="form-group">
+                <label for="email">E-mail <span class="required">*</span></label>
+                <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com">
+                <span class="error-msg" id="erroEmail"></span>
+            </div>
+
+            <!-- 3. Telefone (Telefone com Máscara) -->
+            <div class="form-group">
+                <label for="telefone">Telefone / WhatsApp <span class="required">*</span></label>
+                <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" maxlength="15">
+                <span class="error-msg" id="erroTelefone"></span>
+            </div>
+
+            <div class="form-row">
+                <!-- 4. Data de Nascimento (Data) -->
+                <div class="form-group">
+                    <label for="dataNascimento">Data de Nascimento <span class="required">*</span></label>
+                    <input type="date" id="dataNascimento" name="dataNascimento">
+                    <span class="error-msg" id="erroDataNascimento"></span>
+                </div>
+
+                <!-- 5. Assunto (Seleção / Dropdown) -->
+                <div class="form-group">
+                    <label for="assunto">Assunto <span class="required">*</span></label>
+                    <select id="assunto" name="assunto">
+                        <option value="">Selecione uma opção...</option>
+                        <option value="Dúvidas">Dúvidas</option>
+                        <option value="Suporte">Suporte Técnico</option>
+                        <option value="Orçamento">Solicitar Orçamento</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                    <span class="error-msg" id="erroAssunto"></span>
+                </div>
+            </div>
+
+            <!-- 6. Opções de Preferência (Radio Buttons) -->
+            <div class="form-group">
+                <label>Preferência de Contato <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="preferencia" value="E-mail"> E-mail
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="preferencia" value="WhatsApp"> WhatsApp
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="preferencia" value="Ligação"> Ligação
+                    </label>
+                </div>
+                <span class="error-msg" id="erroPreferencia"></span>
+            </div>
+
+            <!-- 7. Mensagem (Área de Texto + Contador de Caracteres) -->
+            <div class="form-group">
+                <div class="label-with-counter">
+                    <label for="mensagem">Sua Mensagem <span class="required">*</span></label>
+                    <span class="char-counter"><span id="charCount">0</span>/300</span>
+                </div>
+                <textarea id="mensagem" name="mensagem" rows="4" maxlength="300" placeholder="Escreva sua mensagem aqui..."></textarea>
+                <span class="error-msg" id="erroMensagem"></span>
+            </div>
+
+            <!-- Termos e Condições (Caixa de Marcação / Checkbox) -->
+            <div class="form-group checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="termos" name="termos">
+                    <span>Li e aceito os <a href="#" onclick="alert('Termos aceitos!'); return false;">termos de privacidade</a> <span class="required">*</span></span>
+                </label>
+                <span class="error-msg" id="erroTermos"></span>
+            </div>
+
+            <button type="submit" id="btnEnviar" class="btn-submit">
+                <span>Enviar Mensagem</span> 🚀
+            </button>
+        </form>
     </div>
-  </div>
 
-  <main class="page-container">
-    <section class="card-contact">
-
-      <header class="card-header">
-        <span class="badge">💌 Fale Conosco</span>
-        <h1>Envie uma Mensagem</h1>
-        <p>Preencha os campos abaixo para entrar em contato conosco.</p>
-        
-        <!-- Desafio Extra: Contador de contatos salvos -->
-        <div class="counter-badge" id="counterBadge">
-          ⚡ <strong><span id="registeredCount">0</span></strong> contatos cadastrados
-        </div>
-      </header>
-
-      <form id="contactForm" novalidate>
-
-        <!-- Campo 1: Nome (Texto) -->
-        <div class="form-group" id="group-nome">
-          <label for="nome">Nome Completo <span class="required">*</span></label>
-          <div class="input-wrapper">
-            <input type="text" id="nome" name="nome" placeholder="Ex: Maria Silva" required>
-          </div>
-          <span class="error-message" id="error-nome"></span>
-        </div>
-
-        <!-- Grid de 2 Colunas para Email e Telefone -->
-        <div class="form-row">
-          <!-- Campo 2: E-mail (E-mail) -->
-          <div class="form-group" id="group-email">
-            <label for="email">E-mail <span class="required">*</span></label>
-            <div class="input-wrapper">
-              <input type="email" id="email" name="email" placeholder="nome@exemplo.com" required>
-            </div>
-            <span class="error-message" id="error-email"></span>
-          </div>
-
-          <!-- Campo 3: Telefone (Telefone com Máscara) -->
-          <div class="form-group" id="group-telefone">
-            <label for="telefone">Telefone <span class="required">*</span></label>
-            <div class="input-wrapper">
-              <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" maxlength="15" required>
-            </div>
-            <span class="error-message" id="error-telefone"></span>
-          </div>
-        </div>
-
-        <!-- Grid de 2 Colunas para Data de Nascimento e Assunto -->
-        <div class="form-row">
-          <!-- Campo 4: Data de Nascimento (Data) -->
-          <div class="form-group" id="group-dataNascimento">
-            <label for="dataNascimento">Data de Nascimento <span class="required">*</span></label>
-            <div class="input-wrapper">
-              <input type="date" id="dataNascimento" name="dataNascimento" required>
-            </div>
-            <span class="error-message" id="error-dataNascimento"></span>
-          </div>
-
-          <!-- Campo 5: Motivo do Contato (Seleção) -->
-          <div class="form-group" id="group-assunto">
-            <label for="assunto">Motivo do Contato <span class="required">*</span></label>
-            <div class="input-wrapper">
-              <select id="assunto" name="assunto" required>
-                <option value="" disabled selected>Selecione uma opção...</option>
-                <option value="duvida">Dúvidas Gerais</option>
-                <option value="orcamento">Orçamento</option>
-                <option value="suporte">Suporte Técnico</option>
-                <option value="outro">Outros Assuntos</option>
-              </select>
-            </div>
-            <span class="error-message" id="error-assunto"></span>
-          </div>
-        </div>
-
-        <!-- Campo 6: Opção de Preferência de Retorno (Radio / Opções) -->
-        <div class="form-group" id="group-preferencia">
-          <label>Como prefere o retorno?</label>
-          <div class="radio-options">
-            <label class="radio-label">
-              <input type="radio" name="preferencia" value="Email" checked>
-              <span>E-mail</span>
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="preferencia" value="WhatsApp">
-              <span>WhatsApp</span>
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="preferencia" value="Ligacao">
-              <span>Ligação</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Campo 7: Mensagem (Área de Texto com Contador) -->
-        <div class="form-group" id="group-mensagem">
-          <div class="label-with-counter">
-            <label for="mensagem">Sua Mensagem <span class="required">*</span></label>
-            <span class="char-counter" id="charCounter">0 / 300</span>
-          </div>
-          <div class="input-wrapper">
-            <textarea id="mensagem" name="mensagem" rows="4" maxlength="300" placeholder="Escreva aqui detalhes da sua mensagem..." required></textarea>
-          </div>
-          <span class="error-message" id="error-mensagem"></span>
-        </div>
-
-        <!-- Campo 8: Aceitar Termos (Caixa de Marcação / Checkbox) -->
-        <div class="form-group checkbox-group" id="group-termos">
-          <label class="checkbox-label">
-            <input type="checkbox" id="termos" name="termos" required>
-            <span>Concordo com o envio dos dados de acordo com a política de privacidade. <span class="required">*</span></span>
-          </label>
-          <span class="error-message" id="error-termos"></span>
-        </div>
-
-        <!-- Botão de Enviar -->
-        <button type="submit" id="btnSubmit" class="btn-primary">
-          <span>Enviar Mensagem</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-        </button>
-
-      </form>
-    </section>
-  </main>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

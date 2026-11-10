@@ -165,7 +165,7 @@ button:active {
     font-size: 0.825rem;
     margin-top: 5px;
     display: none;
-    animation: shake 0.4s ease-in-out; /* Efeito de tremer no erro */
+    animation: shake 0.4s ease-in-out;
 }
 
 .form-group.invalid input,
@@ -179,7 +179,7 @@ button:active {
     display: block;
 }
 
-/* Mensagem de Sucesso com Animação Deslizar/Aparecer */
+/* Mensagem de Sucesso com Animação Deslizar */
 .success-message {
     background-color: var(--success);
     color: white;
@@ -193,10 +193,10 @@ button:active {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
-/* Animações (Efeitos) */
+/* Animações */
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-6px); }

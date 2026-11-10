@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const count = e.target.value.length;
         charCount.textContent = count;
         
-        // Altera a cor do contador quando chega perto do limite
         if (count >= 450) {
             charCount.style.color = "#ef4444";
         } else {
@@ -64,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
             clearError(email);
         }
 
-        // Validação do Telefone (Mínimo de caracteres para formato válido)
+        // Validação do Telefone
         if (phoneInput.value.replace(/\D/g, "").length < 10) {
             showError(phoneInput);
             isFormValid = false;
@@ -100,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 4. Fluxo de Sucesso
         if (isFormValid) {
-            // Captura os dados preenchidos
             const replyPreference = document.querySelector('input[name="reply-preference"]:checked').value;
             const contactData = {
                 nome: name.value.trim(),
@@ -132,7 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Funções Auxiliares de Controle Visual e Armazenamento
     function showError(inputElement) {
         const group = inputElement.closest(".form-group");
         group.classList.add("invalid");

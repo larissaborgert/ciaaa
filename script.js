@@ -1,155 +1,156 @@
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // Elementos
-    const form = document.getElementById('formContato');
-    const inputNome = document.getElementById('nome');
-    const inputEmail = document.getElementById('email');
-    const inputTelefone = document.getElementById('telefone');
-    const inputData = document.getElementById('dataNascimento');
-    const selectAssunto = document.getElementById('assunto');
-    const inputMensagem = document.getElementById('mensagem');
-    const inputTermos = document.getElementById('termos');
-    const charCount = document.getElementById('charCount');
-    const totalContatosEl = document.getElementById('totalContatos');
-    const toastSucesso = document.getElementById('toastSucesso');
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("contact-form");
+    const phoneInput = document.getElementById("phone");
+    const messageInput = document.getElementById("message");
+    const charCount = document.getElementById("char-count");
+    const totalContactsSpan = document.getElementById("total-contacts");
+    const successMessage = document.getElementById("success-message");
 
-    atualizarContadorContatos();
+    // Inicializa o contador de cadastros salvos no localStorage
+    updateContactCounter();
 
-    // 🏆 Máscara de Telefone: (00) 00000-0000
-    inputTelefone.addEventListener('input', (e) => {
-        let val = e.target.value.replace(/\D/g, '');
-        if (val.length > 11) val = val.slice(0, 11);
+    // 1. Máscara de Telefone em Tempo Real: (00) 00000-0000
+    phoneInput.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
+        
+        if (value.length > 11) value = value.slice(0, 11); // Limita em 11 dígitos
 
-        if (val.length > 6) {
-            val = `(${val.slice(0, 2)})${val.slice(2, 7)}-${val.slice(7)}`; } else if (val.length > 2) { val = `(${val.slice(0, 2)}) ${val.slice(2)}`; } else if (val.length > 0) { val = `(${val}`;
+        if (value.length > 6) {
+            value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
+        } else if (value.length > 2) {
+            value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+        } else if (value.length > 0) {
+            value = `(${value}`;
         }
-        e.target.value = val;
+        
+        e.target.value = value;
     });
 
-    // 🏆 Contador de Caracteres na Mensagem
-    inputMensagem.addEventListener('input', () => {
-        const len = inputMensagem.value.length;
-        charCount.textContent = len;
-        charCount.style.color = len >= 300 ? '#e74c3c' : '#6c757d';
+    // 2. Contador de caracteres na Área de Texto (Mensagem)
+    messageInput.addEventListener("input", (e) => {
+        const count = e.target.value.length;
+        charCount.textContent = count;
+        
+        // Altera a cor do contador quando chega perto do limite
+        if (count >= 450) {
+            charCount.style.color = "#ef4444";
+        } else {
+            charCount.style.color = "#4b5563";
+        }
     });
 
-    // Função de validação de e-mail por regex
-    function validarEmail(email) {
-        return /^[^%\s@]+@[^%\s@]+\.[^%\s@]+$/.test(email);
-    }
+    // 3. Lógica e Validação do Envio do Formulário
+    form.addEventListener("submit", (e) => {
+        e.preventDefault(); // Impede o recarregamento da página 🚫
+        
+        let isFormValid = true;
 
-    function mostrarErro(input, elErro, msg) {
-        if (input) input.classList.add('input-error');
-        elErro.textContent = msg;
-    }
-
-    function limparErro(input, elErro) {
-        if (input) input.classList.remove('input-error');
-        elErro.textContent = '';
-    }
-
-    // Submissão
-    form.addEventListener('submit', (e) => {
-        e.preventDefault(); // 🚫 Não recarrega a página
-
-        let valido = true;
-
-        // Validar Nome
-        if (inputNome.value.trim() === '') {
-            mostrarErro(inputNome, document.getElementById('erroNome'), '❌ Informe seu nome completo.');
-            valido = false;
+        // Validação do Nome
+        const name = document.getElementById("name");
+        if (name.value.trim() === "") {
+            showError(name);
+            isFormValid = false;
         } else {
-            limparErro(inputNome, document.getElementById('erroNome'));
+            clearError(name);
         }
 
-        // Validar Email
-        if (!validarEmail(inputEmail.value.trim())) {
-            mostrarErro(inputEmail, document.getElementById('erroEmail'), '❌ Informe um e-mail válido.');
-            valido = false;
+        // Validação do E-mail (Regex)
+        const email = document.getElementById("email");
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email.value.trim())) {
+            showError(email);
+            isFormValid = false;
         } else {
-            limparErro(inputEmail, document.getElementById('erroEmail'));
+            clearError(email);
         }
 
-        // Validar Telefone
-        if (inputTelefone.value.replace(/\D/g, '').length < 10) {
-            mostrarErro(inputTelefone, document.getElementById('erroTelefone'), '❌ Telefone incompleto.');
-            valido = false;
+        // Validação do Telefone (Mínimo de caracteres para formato válido)
+        if (phoneInput.value.replace(/\D/g, "").length < 10) {
+            showError(phoneInput);
+            isFormValid = false;
         } else {
-            limparErro(inputTelefone, document.getElementById('erroTelefone'));
+            clearError(phoneInput);
         }
 
-        // Validar Data
-        if (inputData.value === '') {
-            mostrarErro(inputData, document.getElementById('erroDataNascimento'), '❌ Selecione a data.');
-            valido = false;
+        // Validação do Motivo (Select)
+        const subject = document.getElementById("subject");
+        if (subject.value === "") {
+            showError(subject);
+            isFormValid = false;
         } else {
-            limparErro(inputData, document.getElementById('erroDataNascimento'));
+            clearError(subject);
         }
 
-        // Validar Assunto
-        if (selectAssunto.value === '') {
-            mostrarErro(selectAssunto, document.getElementById('erroAssunto'), '❌ Selecione o assunto.');
-            valido = false;
+        // Validação da Mensagem
+        if (messageInput.value.trim() === "") {
+            showError(messageInput);
+            isFormValid = false;
         } else {
-            limparErro(selectAssunto, document.getElementById('erroAssunto'));
+            clearError(messageInput);
         }
 
-        // Validar Radio Button
-        const radioPref = document.querySelector('input[name="preferencia"]:checked');
-        if (!radioPref) {
-            mostrarErro(null, document.getElementById('erroPreferencia'), '❌ Selecione uma preferência.');
-            valido = false;
+        // Validação do Checkbox de Termos
+        const terms = document.getElementById("terms");
+        if (!terms.checked) {
+            showError(terms);
+            isFormValid = false;
         } else {
-            limparErro(null, document.getElementById('erroPreferencia'));
+            clearError(terms);
         }
 
-        // Validar Mensagem
-        if (inputMensagem.value.trim().length < 10) {
-            mostrarErro(inputMensagem, document.getElementById('erroMensagem'), '❌ Mínimo de 10 caracteres.');
-            valido = false;
-        } else {
-            limparErro(inputMensagem, document.getElementById('erroMensagem'));
-        }
-
-        // Validar Termos
-        if (!inputTermos.checked) {
-            mostrarErro(null, document.getElementById('erroTermos'), '❌ Aceite os termos.');
-            valido = false;
-        } else {
-            limparErro(null, document.getElementById('erroTermos'));
-        }
-
-        // TUDO CERTO!
-        if (valido) {
-            const novoContato = {
-                id: Date.now(),
-                nome: inputNome.value.trim(),
-                email: inputEmail.value.trim(),
-                telefone: inputTelefone.value.trim(),
-                dataNascimento: inputData.value,
-                assunto: selectAssunto.value,
-                preferencia: radioPref.value,
-                mensagem: inputMensagem.value.trim(),
-                data: new Date().toLocaleString('pt-BR')
+        // 4. Fluxo de Sucesso
+        if (isFormValid) {
+            // Captura os dados preenchidos
+            const replyPreference = document.querySelector('input[name="reply-preference"]:checked').value;
+            const contactData = {
+                nome: name.value.trim(),
+                email: email.value.trim(),
+                telefone: phoneInput.value,
+                dataReuniao: document.getElementById("date").value,
+                motivo: subject.value,
+                preferenciaRetorno: replyPreference,
+                mensagem: messageInput.value.trim(),
+                dataCadastro: new Date().toLocaleString("pt-BR")
             };
 
-            // 💾 Salvar no LocalStorage
-            const contatos = JSON.parse(localStorage.getItem('contatos') || '[]');
-            contatos.push(novoContato);
-            localStorage.setItem('contatos', JSON.stringify(contatos));
+            // Salva no localStorage 💾
+            saveToStorage(contactData);
 
-            // 🎉 Exibir Toast de Sucesso & Limpar Form
-            toastSucesso.classList.add('show');
-            setTimeout(() => toastSucesso.classList.remove('show'), 4000);
+            // Exibe mensagem de sucesso com efeito visual 🎉
+            successMessage.classList.remove("hidden");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
+            // Limpa o formulário e reseta contadores
             form.reset();
-            charCount.textContent = '0';
-            atualizarContadorContatos();
+            charCount.textContent = "0";
+            updateContactCounter();
+
+            // Esconde a mensagem de sucesso após 5 segundos
+            setTimeout(() => {
+                successMessage.classList.add("hidden");
+            }, 5000);
         }
     });
 
-    function atualizarContadorContatos() {
-        const contatos = JSON.parse(localStorage.getItem('contatos') || '[]');
-        totalContatosEl.textContent = contatos.length;
+    // Funções Auxiliares de Controle Visual e Armazenamento
+    function showError(inputElement) {
+        const group = inputElement.closest(".form-group");
+        group.classList.add("invalid");
+    }
+
+    function clearError(inputElement) {
+        const group = inputElement.closest(".form-group");
+        group.classList.remove("invalid");
+    }
+
+    function saveToStorage(data) {
+        let contacts = JSON.parse(localStorage.getItem("contactsList")) || [];
+        contacts.push(data);
+        localStorage.setItem("contactsList", JSON.stringify(contacts));
+    }
+
+    function updateContactCounter() {
+        let contacts = JSON.parse(localStorage.getItem("contactsList")) || [];
+        totalContactsSpan.textContent = contacts.length;
     }
 });

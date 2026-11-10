@@ -3,105 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contato Profissional</title>
-    <link rel="stylesheet" href="estilo.css">
+    <title>Contato Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Ícones modernos -->
+    <link rel="stylesheet" href="https://cloudflare.com">
 </head>
 <body>
 
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
     <div class="container">
-        <!-- Contador de Contatos Cadastrados -->
-        <div class="counter-badge">
-            Total de contatos: <span id="total-contacts">0</span>
-        </div>
-
-        <h1>Fale Conosco</h1>
-        <p class="subtitle">Preencha o formulário abaixo e nossa equipe entrará em contato em breve.</p>
-
-        <!-- Mensagem de Sucesso Geral -->
-        <div id="success-message" class="success-message hidden">
-            🎉 Formulário enviado com sucesso! Dados salvos.
-        </div>
+        <header class="form-header">
+            <h1>Conecte-se Conosco</h1>
+            <p>Preencha os campos abaixo e entraremos em contato o mais rápido possível.</p>
+            <div class="counter-badge">
+                <i class="fa-solid fa-users"></i> Contatos salvos: <span id="global-counter">0</span>
+            </div>
+        </header>
 
         <form id="contact-form" novalidate>
-            
-            <!-- 1. Campo Texto (Nome) -->
-            <div class="form-group">
-                <label for="name">Nome Completo *</label>
-                <input type="text" id="name" required placeholder="Digite seu nome completo">
-                <span class="error-text">O nome é obrigatório.</span>
+            <!-- Nome -->
+            <div class="input-group">
+                <label for="nome"><i class="fa-regular fa-user"></i> Nome Completo</label>
+                <input type="text" id="nome" placeholder="Digite seu nome completo">
+                <span class="error-message"><i class="fa-solid fa-circle-exclamation"></i> Por favor, insira seu nome.</span>
             </div>
 
-            <!-- 2. Campo E-mail -->
-            <div class="form-group">
-                <label for="email">E-mail Corporativo *</label>
-                <input type="email" id="email" required placeholder="seu@email.com">
-                <span class="error-text">Insira um e-mail válido.</span>
+            <!-- E-mail -->
+            <div class="input-group">
+                <label for="email"><i class="fa-regular fa-envelope"></i> E-mail</label>
+                <input type="email" id="email" placeholder="exemplo@email.com">
+                <span class="error-message"><i class="fa-solid fa-circle-exclamation"></i> Insira um e-mail válido.</span>
             </div>
 
-            <!-- 3. Campo Telefone (com máscara) -->
-            <div class="form-group">
-                <label for="phone">Telefone / WhatsApp *</label>
-                <input type="tel" id="phone" required placeholder="(00) 00000-0000" maxlength="15">
-                <span class="error-text">Insira um telefone válido.</span>
+            <!-- Linha Dupla: Telefone e Data -->
+            <div class="form-row">
+                <div class="input-group">
+                    <label for="telefone"><i class="fa-solid fa-phone"></i> Telefone</label>
+                    <input type="tel" id="telefone" placeholder="(00) 00000-0000">
+                    <span class="error-message"><i class="fa-solid fa-circle-exclamation"></i> Telefone incompleto.</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="data-contato"><i class="fa-regular fa-calendar"></i> Data de Contato</label>
+                    <input type="date" id="data-contato">
+                    <span class="error-message"><i class="fa-solid fa-circle-exclamation"></i> Selecione uma data.</span>
+                </div>
             </div>
 
-            <!-- 4. Campo Data -->
-            <div class="form-group">
-                <label for="date">Melhor Data para Reunião</label>
-                <input type="date" id="date">
-                <span class="error-text">Selecione uma data válida.</span>
-            </div>
-
-            <!-- 5. Campo Seleção (Motivo) -->
-            <div class="form-group">
-                <label for="subject">Motivo do Contato *</label>
-                <select id="subject" required>
-                    <option value="" disabled selected>Selecione uma opção</option>
-                    <option value="suporte">Suporte Técnico</option>
-                    <option value="comercial">Orçamento / Comercial</option>
-                    <option value="parceria">Parcerias</option>
-                    <option value="outro">Outros Assuntos</option>
+            <!-- Motivo -->
+            <div class="input-group">
+                <label for="motivo"><i class="fa-solid fa-circle-info"></i> Motivo do Contato</label>
+                <select id="motivo">
+                    <option value="" disabled selected>Selecione uma opção...</option>
+                    <option value="Suporte">Suporte Técnico</option>
+                    <option value="Vendas">Comercial / Vendas</option>
+                    <option value="Parceria">Parcerias</option>
+                    <option value="Outro">Outros Assuntos</option>
                 </select>
-                <span class="error-text">Selecione o motivo do contato.</span>
+                <span class="error-message"><i class="fa-solid fa-circle-exclamation"></i> Selecione o motivo do contato.</span>
             </div>
 
-            <!-- 6. Campo Opções/Radio (Preferência) -->
-            <div class="form-group">
-                <label>Como prefere o retorno? *</label>
+            <!-- Preferência de Contato -->
+            <div class="input-group non-flex">
+                <label class="radio-section-title"><i class="fa-solid fa-sliders"></i> Preferência de Resposta</label>
                 <div class="radio-group">
                     <label class="radio-label">
-                        <input type="radio" name="reply-preference" value="Email" checked> E-mail
+                        <input type="radio" name="preferencia" value="E-mail" checked>
+                        <span class="custom-radio"></span>
+                        E-mail
                     </label>
                     <label class="radio-label">
-                        <input type="radio" name="reply-preference" value="WhatsApp"> WhatsApp
+                        <input type="radio" name="preferencia" value="Telefone">
+                        <span class="custom-radio"></span>
+                        Telefone
                     </label>
                     <label class="radio-label">
-                        <input type="radio" name="reply-preference" value="Telefone"> Ligação
+                        <input type="radio" name="preferencia" value="WhatsApp">
+                        <span class="custom-radio"></span>
+                        WhatsApp
                     </label>
                 </div>
             </div>
 
-            <!-- 7. Campo Área de Texto (Mensagem com contador) -->
-            <div class="form-group">
-                <div class="label-row">
-                    <label for="message">Sua Mensagem *</label>
-                    <span class="char-counter"><span id="char-count">0</span>/500</span>
+            <!-- Mensagem -->
+            <div class="input-group">
+                <div class="label-wrapper">
+                    <label for="mensagem"><i class="fa-regular fa-comment-dots"></i> Sua Mensagem</label>
+                    <span class="char-wrapper"><span id="char-count">0</span> caracteres</span>
                 </div>
-                <textarea id="message" required placeholder="Digite sua mensagem aqui..." maxlength="500" rows="5"></textarea>
-                <span class="error-text">A mensagem não pode ficar vazia.</span>
+                <textarea id="mensagem" rows="4" placeholder="Escreva sua mensagem aqui (mínimo 10 caracteres)..."></textarea>
+                <span class="error-message"><i class="fa-solid fa-circle-exclamation"></i> A mensagem deve ter pelo menos 10 caracteres.</span>
             </div>
 
-            <!-- 8. Caixa de Marcação (Checkbox) -->
-            <div class="form-group checkbox-group">
+            <!-- Termos -->
+            <div class="input-group checkbox-group-container">
                 <label class="checkbox-label">
-                    <input type="checkbox" id="terms" required>
-                    <span>Eu aceito os termos de privacidade e uso de dados. *</span>
+                    <input type="checkbox" id="termos">
+                    <span class="custom-checkbox"></span>
+                    Estou de acordo com os termos de privacidade.
                 </label>
-                <span class="error-text">Você precisa aceitar os termos para continuar.</span>
+                <span class="error-message"><i class="fa-solid fa-circle-exclamation"></i> Você precisa aceitar os termos.</span>
             </div>
 
-            <button type="submit" id="submit-btn">Enviar Mensagem</button>
+            <!-- Botão Submit -->
+            <button type="submit" class="btn-submit">
+                <span>Enviar Mensagem</span>
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
         </form>
+    </div>
+
+    <!-- Modal de Sucesso -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2>Dados Enviados!</h2>
+            <p>Seu contato foi salvo com sucesso no sistema local.</p>
+            <button id="close-modal" class="btn-close">Fechar</button>
+        </div>
     </div>
 
     <script src="script.js"></script>

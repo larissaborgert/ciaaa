@@ -1,153 +1,176 @@
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("contact-form");
-    const phoneInput = document.getElementById("phone");
-    const messageInput = document.getElementById("message");
-    const charCount = document.getElementById("char-count");
-    const totalContactsSpan = document.getElementById("total-contacts");
-    const successMessage = document.getElementById("success-message");
+    const telefoneInput = document.getElementById("telefone");
+    const mensagemInput = document.getElementById("mensagem");
+    const charCounter = document.getElementById("char-count");
+    const globalCounterEl = document.getElementById("global-counter");
+    const successModal = document.getElementById("success-modal");
+    const closeModalBtn = document.getElementById("close-modal");
 
-    // Inicializa o contador de cadastros salvos no localStorage
-    updateContactCounter();
+    // Atualiza o contador global inicial a partir do localStorage
+    atualizarContadorGlobal();
 
-    // 1. Máscara de Telefone em Tempo Real: (00) 00000-0000
-    phoneInput.addEventListener("input", (e) => {
-        let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
-        
-        if (value.length > 11) value = value.slice(0, 11); // Limita em 11 dígitos
-
-        if (value.length > 6) {
-            value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
-        } else if (value.length > 2) {
-            value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-        } else if (value.length > 0) {
-            value = `(${value}`;
+    /* ==========================================================================
+       🏆 REGRA: MÁSCARA DO TELEFONE (00) 00000-0000
+       ========================================================================== */
+    telefoneInput.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for dígito
+        if (value.length > 0) {
+            value = "(" + value;
         }
-        
-        e.target.value = value;
+        if (value.length > 3) {
+            value = value.slice(0, 3) + ") " + value.slice(3);
+        }
+        if (value.length > 10) {
+            value = value.slice(0, 10) + "-" + value.slice(10, 14);
+        }
+        e.target.value = value.slice(0, 15); // Limita ao tamanho máximo com máscara
     });
 
-    // 2. Contador de caracteres na Área de Texto (Mensagem)
-    messageInput.addEventListener("input", (e) => {
-        const count = e.target.value.length;
-        charCount.textContent = count;
-        
-        if (count >= 450) {
-            charCount.style.color = "#ef4444";
-        } else {
-            charCount.style.color = "#4b5563";
-        }
+    /* ==========================================================================
+       🏆 REGRA: CONTADOR DE CARACTERES EM TEMPO REAL
+       ========================================================================== */
+    mensagemInput.addEventListener("input", (e) => {
+        const len = e.target.value.length;
+        charCounter.textContent = len;
     });
 
-    // 3. Lógica e Validação do Envio do Formulário
+    /* ==========================================================================
+       LÓGICA DE VALIDAÇÃO E SUBMIT 🚫
+       ========================================================================== */
     form.addEventListener("submit", (e) => {
-        e.preventDefault(); // Impede o recarregamento da página 🚫
-        
-        let isFormValid = true;
+        e.preventDefault(); // Impede o recarregamento padrão da página
+        let isValid = true;
 
-        // Validação do Nome
-        const name = document.getElementById("name");
-        if (name.value.trim() === "") {
-            showError(name);
-            isFormValid = false;
+        // 1. Validar Nome
+        const nome = document.getElementById("nome");
+        if (nome.value.trim() === "") {
+            showError(nome);
+            isValid = false;
         } else {
-            clearError(name);
+            clearError(nome);
         }
 
-        // Validação do E-mail (Regex)
+        // 2. Validar E-mail (RegEx obrigatório pelas instruções)
         const email = document.getElementById("email");
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email.value.trim())) {
             showError(email);
-            isFormValid = false;
+            isValid = false;
         } else {
             clearError(email);
         }
 
-        // Validação do Telefone
-        if (phoneInput.value.replace(/\D/g, "").length < 10) {
-            showError(phoneInput);
-            isFormValid = false;
+        // 3. Validar Telefone (precisa estar completo com DDD e número)
+        if (telefoneInput.value.replace(/\D/g, "").length < 10) {
+            showError(telefoneInput);
+            isValid = false;
         } else {
-            clearError(phoneInput);
+            clearError(telefoneInput);
         }
 
-        // Validação do Motivo (Select)
-        const subject = document.getElementById("subject");
-        if (subject.value === "") {
-            showError(subject);
-            isFormValid = false;
+        // 4. Validar Data
+        const dataContato = document.getElementById("data-contato");
+        if (dataContato.value === "") {
+            showError(dataContato);
+            isValid = false;
         } else {
-            clearError(subject);
+            clearError(dataContato);
         }
 
-        // Validação da Mensagem
-        if (messageInput.value.trim() === "") {
-            showError(messageInput);
-            isFormValid = false;
+        // 5. Validar Motivo (Seleção)
+        const motivo = document.getElementById("motivo");
+        if (motivo.value === "") {
+            showError(motivo);
+            isValid = false;
         } else {
-            clearError(messageInput);
+            clearError(motivo);
         }
 
-        // Validação do Checkbox de Termos
-        const terms = document.getElementById("terms");
-        if (!terms.checked) {
-            showError(terms);
-            isFormValid = false;
+        // 6. Validar Mensagem (Mínimo de 10 caracteres)
+        if (mensagemInput.value.trim().length < 10) {
+            showError(mensagemInput);
+            isValid = false;
         } else {
-            clearError(terms);
+            clearError(mensagemInput);
         }
 
-        // 4. Fluxo de Sucesso
-        if (isFormValid) {
-            const replyPreference = document.querySelector('input[name="reply-preference"]:checked').value;
-            const contactData = {
-                nome: name.value.trim(),
+        // 7. Validar Termos (Checkbox)
+        const termos = document.getElementById("termos");
+        if (!termos.checked) {
+            showError(termos);
+            isValid = false;
+        } else {
+            clearError(termos);
+        }
+
+        /* ==========================================================================
+           SUCESSO: SALVAMENTO E FEEDBACK 🎉
+           ========================================================================== */
+        if (isValid) {
+            // Captura o valor do Radio Selecionado
+            const preferencia = document.querySelector('input[name="preferencia"]:checked').value;
+
+            // Cria objeto com os dados limpos
+            const novoContato = {
+                nome: nome.value.trim(),
                 email: email.value.trim(),
-                telefone: phoneInput.value,
-                dataReuniao: document.getElementById("date").value,
-                motivo: subject.value,
-                preferenciaRetorno: replyPreference,
-                mensagem: messageInput.value.trim(),
-                dataCadastro: new Date().toLocaleString("pt-BR")
+                telefone: telefoneInput.value,
+                dataContato: dataContato.value,
+                motivo: motivo.value,
+                preferencia: preferencia,
+                mensagem: mensagemInput.value.trim(),
+                dataRegistro: new Date().toISOString()
             };
 
-            // Salva no localStorage 💾
-            saveToStorage(contactData);
+            // Recupera lista do localStorage ou cria uma nova se vazia
+            const listaContatos = JSON.parse(localStorage.getItem("contatos_cadastrados")) || [];
+            listaContatos.push(novoContato);
 
-            // Exibe mensagem de sucesso com efeito visual 🎉
-            successMessage.classList.remove("hidden");
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Salva de volta no LocalStorage 💾
+            localStorage.setItem("contatos_cadastrados", JSON.stringify(listaContatos));
 
-            // Limpa o formulário e reseta contadores
+            // Atualiza os contadores na tela 🌟
+            atualizarContadorGlobal();
+
+            // Exibe a Janelinha Modal de Sucesso
+            successModal.style.display = "flex";
+
+            // Reseta os campos do formulário e contadores internos
             form.reset();
-            charCount.textContent = "0";
-            updateContactCounter();
-
-            // Esconde a mensagem de sucesso após 5 segundos
-            setTimeout(() => {
-                successMessage.classList.add("hidden");
-            }, 5000);
+            charCounter.textContent = "0";
         }
     });
 
+    // Fechar o modal de sucesso ao clicar
+    closeModalBtn.addEventListener("click", () => {
+        successModal.style.display = "none";
+    });
+
+    /* ==========================================================================
+       FUNÇÕES AUXILIARES DE SUPORTE
+       ========================================================================== */
     function showError(inputElement) {
-        const group = inputElement.closest(".form-group");
-        group.classList.add("invalid");
+        inputElement.classList.add("invalid");
+        // Encontra a mensagem de erro que fica logo após ou dentro do input-group
+        const group = inputElement.closest(".input-group");
+        const errorSpan = group.querySelector(".error-message");
+        if (errorSpan) {
+            errorSpan.style.display = "flex"; // Alterado para flex para alinhar com o ícone
+        }
     }
 
     function clearError(inputElement) {
-        const group = inputElement.closest(".form-group");
-        group.classList.remove("invalid");
+        inputElement.classList.remove("invalid");
+        const group = inputElement.closest(".input-group");
+        const errorSpan = group.querySelector(".error-message");
+        if (errorSpan) {
+            errorSpan.style.display = "none";
+        }
     }
 
-    function saveToStorage(data) {
-        let contacts = JSON.parse(localStorage.getItem("contactsList")) || [];
-        contacts.push(data);
-        localStorage.setItem("contactsList", JSON.stringify(contacts));
-    }
-
-    function updateContactCounter() {
-        let contacts = JSON.parse(localStorage.getItem("contactsList")) || [];
-        totalContactsSpan.textContent = contacts.length;
+    function atualizarContadorGlobal() {
+        const listaContatos = JSON.parse(localStorage.getItem("contatos_cadastrados")) || [];
+        globalCounterEl.textContent = listaContatos.length;
     }
 });
